@@ -1,0 +1,104 @@
+30/09/24-
+
+Got the code working for the emissions csv to convert the values of the impacts csv.
+
+1/10/24-
+
+Created test boxplots for the contributions to key indicators - GWP100, Eutrophication and acidification (non-baseline and baseline - 
+need to check). Started downloading data of the other products based on the top 10 crops from the data upload plan, and then looked at 
+the source on HESTIA.
+
+3/10/24-
+
+Fixed the problem with it including land use and occupation. Land use management change models aren't running- not enoguh data. Emissions 
+mapping is correct, need to add a way to exclude anomonously high values of fertiliser/yield. Downloaded all products from CIMMYT
+
+9/10/24-
+
+Checked all products are working - need to add break points in code. 
+
+Models for niger seed are running fine based on look-ups, it's just the only input is diesel and is has a negatvie CO2, above ground biomass stock change, land use change value. 
+
+Sugarcane, stalk has no land occupation models running because there are missing look-ups for things like plantation desnity/duration. This isn't too much of an issue for the time being but can be.
+
+Jute, stalk has an issue that there as some inputs production emissions with no inputs attached to them, causing problems in the name splitting.
+This is because there are nodes for jude, leaf that haven't been deleted. Data needs rerunning.
+
+Have added fixes that remove these issues for now and allow code to run. Have written the code for the bar plot.
+
+17/10/2024:
+
+Checked inputs production emissions mapping and they seem to be fine.
+
+22/10/2024:
+
+Checked code for saving structure numpy arrays made from dataframes and reverting them back, works well. Now want to separate plotting and processing functions for ease as well as the code to run them. Also want to look at loading the CSVs directly and deleting all unecessary columns and maybe rows and see if that allows me to process the whole CSV at once. Would also add in the automated creation of folders and what not. 
+
+24/10/2024:
+
+Have divide up processing and plotting code, potential issue as the hceck to run the processing code is just based on whether the file path exists - might need to change this. Also might want to try adding an optional argument to specify the resolution of the plot. Going to start doing the impact assessment so working more on the site and cycle data. Potential recalculation to add latitude and longitude into site csv using region- might be a long process.
+
+Adding latitude and longitude and made a scaled map - very pretty. Produced fertiliser plot like the idea of having bar chart for fertiliser and irrigation on one plot- key areas of change. Yield needs its own labelled boxplot I think - also need to look for outliers here.
+
+25/10/2024:
+
+Created plot with fertiliser and irrigation - pretty happy with it. Added machinery. Trying to stack barchart all inputs to see what I'm missing but the way I'm appeneding the output to a for loop it's deleting inputs that don't exist in all dataframes - can't find an easy fix for now.
+
+29/10/2024:
+
+Have included the manure in the fertiliser grouping- makes a very small difference as it turns out which is good. Idea for plotting yield and crop residue - have stacked bar chart with crop residue percentages, then line going over for average yield and could also add faostat yield for india 2017 and see how it compares. Also want to add relief to the sites map.
+
+30/10/2024:
+
+Add shading onto sites plot. Has finally worked, just want to do the crop residue and yield plot before Friday.
+
+01/11/2024:
+
+Feedback from Joseph, work on inputs boxplot to find any outliers similar to yield.
+
+08/11/2024:
+
+Added difference with FAO, have got a rewritten abstract. Need to write the long one. Also going to have a separate file just to plot aggregation results.
+
+15/11/2024:
+
+Working on adding IRRI data to map, issue that the column headers are messed up in the CSV so done a quick fix for now. CIMMYT data won't download but need to focus on cleaning up and generalising code for the next couple weeks or gonna get messy.
+
+20/11/2024:
+
+Cleaning up code, written a large processing code that should work but need to test it out. Figuring out making processing code nicer. Need to finish this off - have made a pretty good start but still some parts not fixed and haven't started on the plotting stuff.
+
+21/11/2024:
+
+Testing written code with a maize download from CIMMYT that I got earlier. Have got the yield plot (sorta) working. Have figured out grouping by category but just need to extend to fuel, and grouping by N, P2O5 or K2O
+
+10/12/2024: 
+
+Going to try to test some data removal, looking at 95% interval from the mean I think. Still don't have the original data from the explorer but can work with one I have. Also going to try to improve some documentation.
+
+11/12/2024:
+
+Still working on cleaning up code, have done the products function just need to do fuel on inputs and will then do a separate operations function. Like having it split into nodes I think, most likely separates out what people will want to run. Could split it further but at the moment I don't quite see the point. Have got everything up to data now - going to now wait for CIMMYT and IRRI to be up to do a check. IRRI idea - had an argument saying whether you want the data split out on a country level or not and then add this into the code.
+
+13/12/2024:
+
+Countries idea- for large processing add another function that finds the country, going to have to add it as a sub-folder otherwise IRRI is going to be huge. But adds pointless sub-folders in CIMMYT. Maybe add as a higher level? country -> product? Think it should be relatively easy to neglect in plotting code if you don't care about country split, can add a argument country_level = TRUE/FALSE depending if you want to split.
+
+However, the split by countries and products I've just realised must occur simultaneously - otherwise e.g. for CIMMYT you will still try and read the big csv with all the products and it will fail. Need to figure out how to do this at the same time. Need to come back to this currently what I'm trying I think is really inefficient.
+
+14/12/2024: 
+
+Successfully ammended the large_file_reader to split into country and product. Just need to change processing and plotting and check it all runs.
+Have taken out the reordering of the site csv as realised it doesn't really matter. Have also taken it out in impact as there was an issue when importing the full CIMMYT data. However when I need it later on I prefer the idea of matching on id anyway as feels more consistent.
+
+Finally got it working, have taken out the crop residue stuff, partly cos it was causing issues and I think talking to Florian the modelling has changed and the IPCC model accounts for that biomass somewhere else - will have to check. Inputs currently isn't working due to issues with trying to group fertilisers that aren't there, think this can be fixed fairly easily by moving the if statement I have up. Gonna do the percentiles in plotting and I think yield is a good place to start - will add as an optional argument
+
+15/12/2024:
+
+Have fixed the fertiliser issue, think it should work fine now. Have added the percentile in a couple of plots and seems to be working well, overall makes little difference to the averages apart from some of the more extreme cases, applied at both 95 and 5% at the time being.
+
+Come back - work on LCA and do some two variable distributions for impacts and inputs/yields
+
+09/01/2025:
+
+Have got IRRI working! Have rejigged the processing and plotting code a little, need to continue with this. Also need to work out how I want to do the IRRI plots - will likely end up dividing by country. Tried a impact-variable plot but some huge outliers so not going to be feasible pre the meeting on Tuesday. Want to add the variables df that I'm making to save as a csv as well as an array because it would be much easier for debugging. Site maps working and the regions are there so looks a bit weird but a lot better. 
