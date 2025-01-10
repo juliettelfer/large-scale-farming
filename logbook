@@ -101,4 +101,14 @@ Come back - work on LCA and do some two variable distributions for impacts and i
 
 09/01/2025:
 
-Have got IRRI working! Have rejigged the processing and plotting code a little, need to continue with this. Also need to work out how I want to do the IRRI plots - will likely end up dividing by country. Tried a impact-variable plot but some huge outliers so not going to be feasible pre the meeting on Tuesday. Want to add the variables df that I'm making to save as a csv as well as an array because it would be much easier for debugging. Site maps working and the regions are there so looks a bit weird but a lot better. 
+Have got IRRI working! Have rejigged the processing and plotting code a little, need to continue with this. Also need to work out how I want to do the IRRI plots - will likely end up dividing by country. Tried a impact-variable plot but some huge outliers so not going to be feasible pre the meeting on Tuesday. Want to add the variables df that I'm making to save as a csv as well as an array because it would be much easier for debugging. Site maps working and the regions are there so looks a bit weird but a lot better. Also on my github now.
+
+10/01/25:
+
+Want to rejig my plots, first step is to get IRRI working on the inputs and yield plots and looking nice - decided will split by country. Also want to try and get the nice labels working with shortened crop names as is a little annoying.
+
+The normalised inputs boxplot now splits by country, haven't fixed the labels but don't seed the need at the time being. Am also not going to change my other plots to work on IRRI - no points while waiting on some of the data to be fixed.
+
+Come up with a good new way of getting rid of a lot of for loops using filepath, which should allow me to easily run these on IRRI, and split everything out at a country, product level. For the yield boxplot I'm going to add (cheekily) to the FAO reference CSV a list of labels to simplify the names on the plot.
+
+Have got almost every plot working, except for the indicator contributions but think there's a bug in the IRRI data. Want to focus on that plot Joseph asked for, also need to look at including completeness because this isn't as consistent in IRRI as it is in CIMMYT.

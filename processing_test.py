@@ -1,4 +1,11 @@
 import _functions_.processing as request
-print()
+import os
 
-request.get_lat_long_site("riceGrainInHuskFlooded", "India", "LCAS")
+source = 'LCAS'
+product = "riceGrainInHuskFlooded"
+countries = ['Bangladesh', 'India', 'Nepal']
+
+for country in countries:
+
+    request.get_indicator_contributions(product, country, source, 
+                                        "co2EqGwp100Ipcc2021")

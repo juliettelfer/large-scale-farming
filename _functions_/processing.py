@@ -224,7 +224,7 @@ def get_variables_impacts(self, country, source):
                 'term.defaultProperties.4.value'])
             fertiliser[f"{column}KgK2O"] = organic_fertiliser[
                 column].mul(factor_K_value/100)
-
+   
     for index, column in enumerate(brand_name_fertiliser):
         factor_N_value = float(brand_name_fertiliser_ref.loc[
             brand_name_fertiliser_ref['term.id'] == column,
@@ -249,11 +249,12 @@ def get_variables_impacts(self, country, source):
 
         grouped_fertiliser.columns = grouped_fertiliser.columns.str.split('Kg')
         grouped_fertiliser = grouped_fertiliser.groupby([
-            c[1] for c in grouped_fertiliser.columns], axis=1).sum()
+            c[-1] for c in grouped_fertiliser.columns], axis=1).sum()
         grouped_fertiliser.columns = grouped_fertiliser.columns.str.split(
             '.')
         grouped_fertiliser = grouped_fertiliser.groupby([
             c[0] for c in grouped_fertiliser.columns], axis=1).sum()
+    print(grouped_fertiliser)
 
     if 'N' in grouped_fertiliser:
         variables['N Fertiliser (kg)'] = grouped_fertiliser['N']
@@ -298,9 +299,9 @@ def get_variables_impacts(self, country, source):
     # Add the impacts columns to variables
     variables = variables.merge(impacts)
     
-    # Save arrays
-    variables_array = variables.to_records(index=False)
-    np.save(f"{save_directory}variables", variables_array)
+    # Save as csv (easier to debug)
+
+    variables.to_csv(f"{save_directory}variables.csv")
 
 
 def get_lat_long_site(self, country, source):
@@ -374,22 +375,28 @@ def get_indicator_contributions(self, country, source, indicator):
     # Group input emissions, drop columns where all values are 0
     input_emissions = emissions.filter(like='InputsProduction')
     group_input_emissions = input_emissions.copy()
+    print(group_input_emissions.columns.values)
     group_input_emissions.columns = group_input_emissions.columns.str.split(
-        '+')
-    group_input_emissions = group_input_emissions.groupby(
-        [c[1] for c in group_input_emissions.columns], axis=1).sum()
-    group_input_emissions.columns = group_input_emissions.columns.str.split(
-        '.')
+        'inputs[\[]')
     group_input_emissions = group_input_emissions.groupby(
         [c[0] for c in group_input_emissions.columns], axis=1).sum()
+    
+    group_input_emissions.columns = group_input_emissions.columns.str.split(
+         '[\]]')
+    group_input_emissions = group_input_emissions.groupby(
+         [c[0] for c in group_input_emissions.columns], axis=1).sum()
+    
+    # Remove empty columns
     grouped_input_emissions = group_input_emissions.loc[
         :, group_input_emissions.any()]
-        
+  
     # Remove emissions that do not have factors in the csv - this is here for
     # the land occupation emissions that were occurring
+
     factor_list = factor_ref.loc[:, 'term.id']
     group_emissions_list = group_emissions.columns.values.tolist()
     unwanted_list = list(set(group_emissions_list) - set(factor_list))
+
     if unwanted_list:
         pattern = '|'.join(unwanted_list)
         group_emissions = group_emissions.drop(list(

@@ -6,8 +6,9 @@ This file is used for running the plotting functions.
 Begin by defining your variables then choose a function
 to run from _functions_/plotting.py
 '''
-sources = ["CoC"]
+# Sources inputted into a plotting function must be a list
 
-plot.variables_scatter_plot(sources, 'Yield (kg)', 
-                            'impacts.gwp100.value',
-                            'riceGrainInHuskFlooded')
+sources = os.listdir("sources/")
+
+plot.indiactor_barchart(["LCAS"], "co2EqGwp100Ipcc2021", 
+                        "GWP100 (kgCO2Eq, IPCC 2021)")
